@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuit IQ | AI-Powered Text to PCB Design</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --stripe-purple: #635BFF;
+            --stripe-purple-dark: #4F46E5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.5;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--dark);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+        
+        .payment-btn {
+            background-color: var(--stripe-purple);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            font-weight: 600;
+        }
+        
+        .payment-btn:hover {
+            background-color: var(--stripe-purple-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .hero {
+            padding: 6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            background: linear-gradient(to bottom, white, var(--light));
+        }
+        
+        .hero-content {
+            flex: 1;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease;
+        }
+        
+        .hero-image img:hover {
+            transform: translateY(-10px);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+        
+        h1 span {
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .features {
+            padding: 6rem 0;
+            background-color: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .feature-card {
+            padding: 2rem;
+            border-radius: 0.75rem;
+            background-color: var(--light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+        }
+        
+        .highlight-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+        }
+        
+        .highlight-container {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+        
+        .highlight-content {
+            flex: 1;
+        }
+        
+        .highlight-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .highlight-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .highlight-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .highlight-content p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .how-it-works {
+            padding: 6rem 0;
+            background-color: white;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            counter-reset: step;
+        }
+        
+        .step {
+            position: relative;
+            padding: 2rem;
+            background-color: var(--light);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+        }
+        
+        .step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .pricing {
+            padding: 6rem 0;
+            background-color: var(--light);
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            padding: 3rem 2rem;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pricing-card.highlighted {
+            border: 2px solid var(--primary);
+            transform: scale(1.05);
+            z-index: 1;
+        }
+        
+        .pricing-card.highlighted::before {
+            content: "Most Popular";
+            position: absolute;
+            top: 12px;
+            right: -35px;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.25rem 3rem;
+            transform: rotate(45deg);
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .pricing-card.highlighted:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .pricing-card .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 1.5rem 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        
+        .pricing-card .price small {
+            font-size: 1.25rem;
+            color: var(--gray);
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+        
+        .pricing-card .price-description {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: var(--gray);
+        }
+        
+        .pricing-card ul {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+            flex-grow: 1;
+        }
+        
+        .pricing-card li {
+            margin-bottom: 1rem;
+            padding-left: 1.75rem;
+            position: relative;
+        }
+        
+        .pricing-card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+        
+        .pricing-btn {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            width: 100%;
+            margin-top: auto;
+        }
+        
+        .enterprise-btn {
+            background-color: var(--dark);
+        }
+        
+        .enterprise-btn:hover {
+            background-color: black;
+        }
+        
+        .payment-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .payment-badge svg {
+            height: 16px;
+            margin-right: 6px;
+        }
+        
+        .testimonials {
+            padding: 6rem 0;
+            background-color: white;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .testimonial-card {
+            padding: 2rem;
+            background-color: var(--light);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            font-size: 1.125rem;
+            line-height: 1.7;
+            position: relative;
+        }
+        
+        .testimonial-content::before {
+            content: """;
+            font-size: 4rem;
+            color: rgba(37, 99, 235, 0.2);
+            position: absolute;
+            top: -1.5rem;
+            left: -0.5rem;
+            line-height: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray-light);
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+        
+        .testimonial-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .testimonial-name {
+            font-weight: 600;
+        }
+        
+        .testimonial-title {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .cta {
+            padding: 6rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--stripe-purple) 100%);
+            color: white;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .cta p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta .btn {
+            background-color: white;
+            color: var(--primary);
+            font-size: 1.25rem;
+            padding: 1rem 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cta .btn:hover {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .cta-guarantee {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-col h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-col ul a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-col ul a:hover {
+            color: white;
+        }
+        
+        .footer-col p {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.875rem;
+        }
+        
+        .contact-section {
+            padding: 6rem 0;
+            background-color: white;
+        }
+        
+        .contact-container {
+            display: flex;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-form {
+            flex: 2;
+            background-color: var(--light);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .contact-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-info p {
+            color: var(--gray);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-method i {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .contact-method-details h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .contact-method-details p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 992px) {
+            .pricing-grid {
+                gap: 3rem;
+            }
+            
+            .pricing-card.highlighted {
+                transform: scale(1.03);
+            }
+            
+            .pricing-card.highlighted:hover {
+                transform: translateY(-10px) scale(1.03);
+            }
+            
+            .contact-container {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero, .highlight-container {
+                flex-direction: column;
+                padding: 4rem 0;
+            }
+            
+            .hero-image, .highlight-image {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-header h2, .highlight-content h2, .cta h2 {
+                font-size: 2rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .pricing-card.highlighted {
+                transform: scale(1);
+                margin: 2rem 0;
+            }
+            
+            .pricing-card.highlighted:hover {
+                transform: translateY(-10px) scale(1);
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .sticky-cta {
+                display: block;
+            }
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .float-animation {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-actions {
+                display: none;
+            }
+            
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: white;
+                padding: 1rem 2rem;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Circuit<span>IQ</span></div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="https://buy.stripe.com/eVaaEK1Bd3Vnfq8aEF" target="_blank" class="payment-btn btn">Start Now</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Transform <span>Text</span> Into Production-Ready PCB Designs</h1>
+                <p>Circuit IQ leverages advanced AI to convert natural language descriptions into professional PCB designs, reducing design time by up to 80% and accelerating your product development pipeline.</p>
+                <div class="hero-buttons">
+                    <a href="https://buy.stripe.com/eVaaEK1Bd3Vnfq8aEF" target="_blank" class="payment-btn btn btn-large">Start for $49/month</a>
+                    <a href="#how-it-works" class="btn btn-outline btn-large">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/api/placeholder/550/400" alt="CircuitIQ Platform Interface" class="float-animation" />
+            </div>
+        </div>
+    </section>
+    
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Our AI-powered platform streamlines the PCB design process from concept to production.</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3>AI-Powered Design</h3>
+                    <p>Simply describe your circuit requirements in natural language, and our AI generates professional PCB layouts optimized for performance and manufacturability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Lightning Fast</h3>
+                    <p>Generate complete PCB designs in minutes instead of days, accelerating your product development cycle and reducing time-to-market.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3>Iterative Refinement</h3>
+                    <p>Easily refine generated designs through natural language feedback, allowing for rapid design iterations without manual CAD work.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Design Optimization</h3>
+                    <p>Our AI analyzes your requirements and optimizes for signal integrity, thermal performance, power efficiency, and manufacturing cost.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>Component Library</h3>
+                    <p>Access our extensive library of verified components with automated part selection based on your performance requirements and budget constraints.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-file-export"></i></div>
+                    <h3>Export Ready</h3>
+                    <p>Export designs in industry-standard formats compatible with all major PCB manufacturing processes and CAD software.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="highlight-section">
+        <div class="container highlight-container">
+            <div class="highlight-content">
+                <h2>Save 80% of Your Engineering Time</h2>
+                <p>Circuit IQ's breakthrough AI technology allows electrical engineers to focus on innovation rather than time-consuming layout work. Our customers report that complex PCB designs that used to take weeks now take only hours.</p>
+                <a href="https://buy.stripe.com/eVaaEK1Bd3Vnfq8aEF" target="_blank" class="payment-btn btn">Try it for only $49/month</a>
+            </div>
+            <div class="highlight-image">
+                <img src="/api/placeholder/500/350" alt="Time saving with Circuit IQ" class="float-animation" />
+            </div>
+        </div>
+    </section>
+    
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How Circuit IQ Works</h2>
+                <p>Our streamlined process takes you from concept to production-ready PCB design in just a few steps.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <h3>Describe Your Requirements</h3>
+                    <p>Specify your circuit requirements in natural language. Include details about components, connections, power needs, and design constraints.</p>
+                </div>
+                <div class="step">
+                    <h3>AI-Generated Design</h3>
+                    <p>Our AI analyzes your requirements and generates an optimized PCB design, complete with component placement and routing.</p>
+                </div>
+                <div class="step">
+                    <h3>Review & Refine</h3>
+                    <p>Review the generated design and provide feedback in natural language. Our AI will refine the design based on your comments.</p>
+                </div>
+                <div class="step">
+                    <h3>Export & Manufacture</h3>
+                    <p>Export your finalized design in industry-standard formats ready for manufacturing or further refinement in your preferred CAD tool.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple, Transparent Pricing</h2>
+                <p>Choose the plan that fits your business needs</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card highlighted">
+                    <h3>Professional</h3>
+                    <div class="price">$49<small>/month</small></div>
+                    <p class="price-description">Perfect for individual engineers</p>
+                    <ul>
+                        <li>Unlimited PCB designs</li>
+                        <li>AI-powered design generation</li>
+                        <li>Natural language feedback</li>
+                        <li>Component optimization</li>
+                        <li>Gerber file export</li>
+                        <li>Design version history</li>
+                        <li>Manufacturing validation</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="https://buy.stripe.com/eVaaEK1Bd3Vnfq8aEF" target="_blank" class="payment-btn btn pricing-btn">Get Started</a>
+                    <div class="payment-badge">
+                        <svg width="40" height="16" viewBox="0 0 40 16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M38.6113 6.73455H36.3322C36.3322 4.94547 34.8678 3.49461 33.0591 3.49461C31.2503 3.49461 29.7861 4.94547 29.7861 6.73455H27.5069C27.5069 3.70601 29.9995 1.23755 33.0591 1.23755C36.1186 1.23755 38.6113 3.70601 38.6113 6.73455Z" fill="#635BFF"/>
+                            <path d="M33.059 12.2346C29.9993 12.2346 27.5068 9.76609 27.5068 6.73766H29.786C29.786 8.52669 31.2502 9.97755 33.059 9.97755C34.8677 9.97755 36.3321 8.52669 36.3321 6.73766H38.6112C38.6112 9.76609 36.1187 12.2346 33.059 12.2346Z" fill="#635BFF"/>
+                            <path d="M10.8491 4.15527H7.15458V11.3176H10.8491C13.1983 11.3176 14.8362 9.67968 14.8362 7.7365C14.8362 5.7932 13.1983 4.15527 10.8491 4.15527ZM10.8825 9.3791H9.18733V6.09399H10.8825C11.8698 6.09399 12.6693 6.76699 12.6693 7.73654C12.6693 8.7061 11.8698 9.3791 10.8825 9.3791Z" fill="#635BFF"/>
+                            <path d="M16.4188 11.3175H18.4521V4.15521H16.4188V11.3175Z" fill="#635BFF"/>
+                            <path d="M24.4689 4.15527H20.5409V11.3176H22.5742V9.07158H24.4689C26.0668 9.07158 27.3635 7.77541 27.3635 6.61342C27.3635 5.45144 26.0668 4.15527 24.4689 4.15527ZM24.4021 7.16723H22.5742V6.0602H24.4021C24.7686 6.0602 25.0682 6.28977 25.0682 6.61343C25.0682 6.93709 24.7686 7.16723 24.4021 7.16723Z" fill="#635BFF"/>
+                            <path d="M1.61499 4.15521L1.4814 4.52309C1.4814 4.52309 0.961133 6.04278 0.828282 6.41067H5.35913C5.35913 6.41067 5.19219 5.87492 5.15886 5.74175H2.24916L2.34913 5.47904H5.22553L5.09196 5.11104C5.09196 5.11104 4.9583 4.62952 4.92502 4.49635H1.9815L2.08146 4.23375H4.99115L4.85742 3.86586H1.73822C1.73822 3.86586 2.25856 5.31173 2.85835 6.74539C3.45819 8.17906 4.09169 9.47524 4.09169 9.47524H5.85838C5.85838 9.47524 7.25479 6.04266 7.65467 5.11088L7.02123 4.31459L6.65468 5.11088H6.12086L6.95462 3.5979C6.28792 3.43129 5.72455 4.00041 5.62465 4.15521H1.61499Z" fill="#635BFF"/>
+                        </svg>
+                        <span>Secure payment via Stripe</span>
+                    </div>
+                </div>
+                <div class="pricing-card">
+                    <h3>Team</h3>
+                    <div class="price">$149<small>/month</small></div>
+                    <p class="price-description">Ideal for small teams</p>
+                    <ul>
+                        <li>Everything in Professional</li>
+                        <li>5 user seats</li>
+                        <li>Team collaboration tools</li>
+                        <li>Shared component library</li>
+                        <li>Design review workflow</li>
+                        <li>Access control & permissions</li>
+                        <li>Design templates</li>
+                        <li>Priority email support</li>
+                    </ul>
+                    <a href="#contact" class="btn pricing-btn">Contact Sales</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <p class="price-description">For larger organizations</p>
+                    <ul>
+                        <li>Everything in Team</li>
+                        <li>Unlimited users</li>
+                        <li>Custom AI model training</li>
+                        <li>API access</li>
+                        <li>Custom integrations</li>
+                        <li>SSO & advanced security</li>
+                        <li>Dedicated success manager</li>
+                        <li>24/7 priority support</li>
+                    </ul>
+                    <a href="#contact" class="enterprise-btn btn pricing-btn">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>What Our Customers Say</h2>
+                <p>Join hundreds of satisfied engineers who have transformed their PCB design workflow.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        Circuit IQ has completely revolutionized our hardware development process. What used to take weeks now takes hours. The AI is remarkably accurate at understanding our requirements and generates PCB designs that are ready for manufacturing with minimal adjustments.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="/api/placeholder/50/50" alt="Sarah Johnson">
+                        </div>
+                        <div>
+                            <div class="testimonial-name">Sarah Johnson</div>
+                            <div class="testimonial-title">Lead Hardware Engineer, TechInnovate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        As a startup with limited engineering resources, Circuit IQ has been a game-changer. We've been able to iterate on our hardware designs 5x faster than before, which has dramatically accelerated our time to market. The $49/month is a no-brainer compared to the engineering time saved.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="/api/placeholder/50/50" alt="Michael Chen">
+                        </div>
+                        <div>
+                            <div class="testimonial-name">Michael Chen</div>
+                            <div class="testimonial-title">Founder, IoT Solutions</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        I was skeptical at first about AI-generated PCB designs, but Circuit IQ exceeded my expectations. The quality of the designs is excellent, the interface is intuitive, and the time savings are substantial. It's become an indispensable tool in my workflow.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">
+                            <img src="/api/placeholder/50/50" alt="David Rodriguez">
+                        </div>
+                        <div>
+                            <div class="testimonial-name">David Rodriguez</div>
+                            <div class="testimonial-title">Senior Electrical Engineer, Embedded Systems Inc.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Us</h2>
+                <p>Have questions? Our team is here to help.</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Get In Touch</h2>
+                    <p>Whether you're interested in our enterprise solutions or have questions about our platform, our team is ready to assist you.</p>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <div class="contact-method-details">
+                            <h4>Email Us</h4>
+                            <p>sales@circuitiq.ai</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-phone-alt"></i>
+                        <div class="contact-method-details">
+                            <h4>Call Us</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-method-details">
+                            <h4>Visit Us</h4>
+                            <p>123 Innovation Drive<br>San Francisco, CA 94105</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tags" style="margin-top: 2rem;">
+                        <span class="tag">PCB Design</span>
+                        <span class="tag">AI-Powered</span>
+                        <span class="tag">Hardware Development</span>
+                        <span class="tag">Engineering Tools</span>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="company">Company Name</label>
+                            <input type="text" id="company" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interest">I'm interested in</label>
+                            <select id="interest" class="form-control">
+                                <option>Professional Plan ($49/month)</option>
+                                <option>Team Plan ($149/month)</option>
+                                <option>Enterprise Solution</option>
+                                <option>Custom Integration</option>
+                                <option>Other Inquiry</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="payment-btn btn btn-large" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Transform Your PCB Design Process?</h2>
+            <p>Join leading companies that are already saving hundreds of engineering hours every month.</p>
+            <a href="https://buy.stripe.com/eVaaEK1Bd3Vnfq8aEF" target="_blank" class="btn btn-large">Start for Just $49/month</a>
+            <p class="cta-guarantee">30-day money-back guarantee. No long-term contracts. Cancel anytime.</p>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Circuit IQ</h4>
+                    <p>AI-powered PCB design that transforms text descriptions into production-ready Gerber files, saving electrical engineers countless hours.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Circuit IQ. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId !== "#") {
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    document.getElementById('navLinks').classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
